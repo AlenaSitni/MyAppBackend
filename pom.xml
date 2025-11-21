@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>nl.blitz</groupId>
-    <artifactId>java-21-springboot-template</artifactId>
+    <artifactId>personal-route-monitor-application</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>java-21-springboot-template</name>
+    <name>personal-route-monitor-application</name>
     <description>java-21-springboot-template</description>
     <url/>
     <licenses>
