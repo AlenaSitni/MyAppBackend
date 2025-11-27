@@ -1,27 +1,26 @@
 package nl.blitz.java21springboottemplate.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.*;  // imports Entity, Id, GeneratedValue, GenerationType, OneToMany, ManyToOne, CascadeType, etc.
-import java.time.LocalDateTime; // for LocalDateTime
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TrainType { //Declares a new Java class called TrainType
+public class TrainType {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // unique ID for this train type
+    private Long id;
 
-    private String typeName; // e.g., "IC", "Sprinter"
+    @Column(unique = true)
+    private String typeName;
 
-    private String description; // optional, e.g., "Intercity train with limited stops"
+    private String description;
 
-    @OneToMany(mappedBy = "trainType", cascade = CascadeType.ALL)
-    private List<Arrival> arrivals; // all arrivals of this train type
+    @OneToMany(mappedBy = "trainType")
+    @JsonIgnore   // prevent infinite recursion
+    private List<Arrival> arrivals;
 
-    // Getters and setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

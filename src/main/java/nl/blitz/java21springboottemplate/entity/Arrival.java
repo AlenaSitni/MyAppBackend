@@ -1,31 +1,34 @@
 package nl.blitz.java21springboottemplate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.time.LocalDateTime; // <-- THIS IS REQUIRED
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity //Marks this class as a JPA entity, meaning it maps to a database table
+@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Arrival {
 
-public class Arrival { //Class declaration
-    @Id //Marks this field as the primary key of the table
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //tells JPA (the Java Persistence API) that the value of this field should be automatically generated when a new record is saved to the database
-    private Long id; //Creating a variable for id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String departure; //Declaring a variable for departure - station name from which the train departs
-    private String destination; //Declaring a variable for arrival - station name to which the train arrives
+    private String departure;
+    private String destination;
 
-    private LocalDateTime plannedTime; //LocalDateTime - datatype, declaring variables
+    private LocalDateTime plannedTime;
     private LocalDateTime actualTime;
 
-    private boolean cancelled; //boolean is true/false value: true - train was cancelled; false - train ran normally
+    private boolean cancelled;
 
-    @ManyToOne(cascade = CascadeType.ALL) //Many Arrival records can point to one TrainType
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "train_type_id")
     private TrainType trainType;
 
-    @OneToMany(cascade = CascadeType.ALL) //One Arrival can have many Message objects associated with it. Message objects are, for instance: “Train is delayed 5 minutes”
-    private List<Message> messages; //List<Message> is a list, and it will only contain objects of type Message
+    @OneToMany(mappedBy = "arrival", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages;
 
-    // Getters and setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -1,23 +1,26 @@
 package nl.blitz.java21springboottemplate.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 public class Message {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // unique ID for the message
+    private Long id;
 
-    private String message; // the actual message text, e.g., "Train delayed 5 minutes"
+    private String message;
 
-    private LocalDateTime timestamp; // when the message was created
+    private LocalDateTime timestamp = LocalDateTime.now();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Arrival arrival; // which Arrival this message belongs to
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "arrival_id")
+    @JsonIgnore   // prevent infinite JSON loop
+    private Arrival arrival;
 
-    // Getters and setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

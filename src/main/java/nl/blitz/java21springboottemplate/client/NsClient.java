@@ -4,6 +4,8 @@ import nl.blitz.java21springboottemplate.dto.ArrivalDto;
 import nl.blitz.java21springboottemplate.dto.ArrivalsResponseDto;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -26,20 +28,37 @@ public class NsClient {
 
         HttpEntity<Void> request = new HttpEntity<>(headers);
 
-        ResponseEntity<ArrivalsResponseDto> response = restTemplate.exchange(
-                URL,
-                HttpMethod.GET,
-                request,
-                ArrivalsResponseDto.class
-        );
+        try {
+            ResponseEntity<ArrivalsResponseDto> response = restTemplate.exchange(
+                    URL,
+                    HttpMethod.GET,
+                    request,
+                    ArrivalsResponseDto.class
+            );
 
-        // Now DTOs exist → getPayload() is VALID
-        if (response.getBody() == null ||
-                response.getBody().getPayload() == null ||
-                response.getBody().getPayload().getArrivals() == null) {
+            // If NS returns non-200, just return empty list
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("NS API returned status: " + response.getStatusCode());
+                return List.of();
+            }
+
+            if (response.getBody() == null ||
+                    response.getBody().getPayload() == null ||
+                    response.getBody().getPayload().getArrivals() == null) {
+                return List.of();
+            }
+
+            return response.getBody().getPayload().getArrivals();
+
+        } catch (HttpStatusCodeException ex) {
+            // when NS returns 500, 404, etc.
+            System.out.println("NS API error: " + ex.getStatusCode());
+            System.out.println("Response body: " + ex.getResponseBodyAsString());
+            return List.of();
+        } catch (RestClientException ex) {
+            // network error, timeout, DNS, etc.
+            System.out.println("Error calling NS API: " + ex.getMessage());
             return List.of();
         }
-
-        return response.getBody().getPayload().getArrivals();
     }
 }

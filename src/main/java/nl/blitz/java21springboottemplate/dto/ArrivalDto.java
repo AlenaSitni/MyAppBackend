@@ -1,6 +1,7 @@
 package nl.blitz.java21springboottemplate.dto;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class ArrivalDto {
@@ -8,8 +9,8 @@ public class ArrivalDto {
     private String origin;                     // Where the train comes from
     private String name;                       // Train name / number
     private String trainCategory;              // "IC", "SPR", etc.
-    private LocalDateTime plannedDateTime;     // Planned arrival
-    private LocalDateTime actualDateTime;      // Actual arrival
+    private OffsetDateTime plannedDateTime;     // Planned arrival
+    private OffsetDateTime actualDateTime;      // Actual arrival
     private String plannedTrack;               // Platform
     private String actualTrack;                // Actual platform
 
@@ -29,11 +30,11 @@ public class ArrivalDto {
     public String getTrainCategory() { return trainCategory; }
     public void setTrainCategory(String trainCategory) { this.trainCategory = trainCategory; }
 
-    public LocalDateTime getPlannedDateTime() { return plannedDateTime; }
-    public void setPlannedDateTime(LocalDateTime plannedDateTime) { this.plannedDateTime = plannedDateTime; }
+    public OffsetDateTime getPlannedDateTime() { return plannedDateTime; }
+    public void setPlannedDateTime(OffsetDateTime plannedDateTime) { this.plannedDateTime = plannedDateTime; }
 
-    public LocalDateTime getActualDateTime() { return actualDateTime; }
-    public void setActualDateTime(LocalDateTime actualDateTime) { this.actualDateTime = actualDateTime; }
+    public OffsetDateTime getActualDateTime() { return actualDateTime; }
+    public void setActualDateTime(OffsetDateTime actualDateTime) { this.actualDateTime = actualDateTime; }
 
     public String getPlannedTrack() { return plannedTrack; }
     public void setPlannedTrack(String plannedTrack) { this.plannedTrack = plannedTrack; }
